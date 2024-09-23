@@ -1,0 +1,1 @@
+# inspec-rabbitmq-resources
