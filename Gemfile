@@ -9,5 +9,6 @@ group :test do
   gem "chefstyle"
   gem "minitest"
   gem "m"
+  gem "mocha"
   gem "rake"
 end
