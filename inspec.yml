@@ -1,0 +1,10 @@
+name: inspec-rabbitmq-resources
+title: Resource pack gem for RabbitmqResources
+maintainer: InSpec Core Maintainers
+copyright: Progress Software Corporation
+copyright_email: inspec@progress.com
+license: Apache-2.0
+summary: rabbitmq InSpec Resources in a Gem
+version: 0.1.0
+supports:
+  platform: os
