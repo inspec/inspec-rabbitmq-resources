@@ -7,7 +7,6 @@ pipelines:
  - verify:
       definition: .expeditor/verify.pipeline.yml
       description: Executes the verify pipeline for Resource packs
-
 rubygems:
   - inspec-rabbitmq-resources:
       gemspec_path: .

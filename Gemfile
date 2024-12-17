@@ -8,7 +8,6 @@ group :test do
   gem "byebug"
   gem "chefstyle"
   gem "minitest"
-  gem "minitest-sprint"
   gem "m"
   gem "mocha"
   gem "rake"

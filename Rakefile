@@ -19,7 +19,6 @@ end
 
 Rake::TestTask.new do |t|
   t.libs << "lib"
-  t.libs << "test"         # Add the test directory to the load path
   t.libs << File.join("test", "unit")
   t.warning = false
   t.verbose = true
