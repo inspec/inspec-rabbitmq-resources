@@ -1,4 +1,6 @@
 ---
+product_key: inspec-rabbitmq-resources
+
 slack:
   notify_channel:
     - inspec-notify
