@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.version       = InspecPlugins::RabbitmqResources::VERSION
   spec.authors       = ["InSpec Core Maintainers"]
   spec.email         = ["inspec@progress.com"]
-  spec.summary       = "Docker InSpec Resources in a Gem"
-  spec.description   = "Contains InSpec 7.0+ resources fo interacting with Docker Desktop."
+  spec.summary       = "Rabbitmq InSpec Resources in a Gem"
+  spec.description   = "Contains InSpec 7.0+ resources fo interacting with Rabbitmq Resources."
   spec.homepage      = "https://github.com/inspec/inspec-rabbitmq-resources"
   spec.license       = "Apache-2.0"
 
