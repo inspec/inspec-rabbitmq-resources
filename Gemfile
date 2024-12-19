@@ -12,4 +12,6 @@ group :test do
   gem "m"
   gem "mocha"
   gem "rake"
+  gem "simplecov"
+  gem "simplecov_json_formatter"
 end
