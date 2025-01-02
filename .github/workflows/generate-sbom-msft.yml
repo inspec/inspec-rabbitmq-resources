@@ -1,0 +1,34 @@
+name: Generate SBOM with Microsoft SBOM Tool and Upload as Artifact
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Download and Set Up Microsoft SBOM Tool
+      - name: Install Microsoft SBOM Tool
+        run: |
+          curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
+          chmod +x $RUNNER_TEMP/sbom-tool
+
+      # Step 3: Generate SBOM
+      - name: Generate SBOM
+        run: |
+          mkdir -p ./sbom-output
+          $RUNNER_TEMP/sbom-tool generate -b ./sbom-output -bc . -pn my-project -pv 1.0.0 -ps "Progress Chef" -nsb https://www.progress.com/ -V Verbose
+
+      # Step 4: Upload SBOM as GitHub Artifact
+      - name: Upload SBOM as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: msft-sbom
+          path: ./sbom-output/_manifest/spdx_2.2/manifest.spdx.json
