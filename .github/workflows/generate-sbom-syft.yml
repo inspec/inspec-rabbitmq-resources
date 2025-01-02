@@ -1,45 +1,45 @@
-name: Generate SBOM with Syft and Upload as Artifact
+# name: Generate SBOM with Syft and Upload as Artifact
 
-# NOTE: We would probably want to run this workflow on every push to main and not on pull requests
+# # NOTE: We would probably want to run this workflow on every push to main and not on pull requests
+# # on:
+# #   push:
+# #     branches:
+# #       - main
+
 # on:
-#   push:
+#   pull_request:
 #     branches:
 #       - main
 
-on:
-  pull_request:
-    branches:
-      - main
+# jobs:
+#   generate-sbom:
+#     runs-on: ubuntu-latest
 
-jobs:
-  generate-sbom:
-    runs-on: ubuntu-latest
+#     steps:
+#       # Step 1: Checkout the repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-    steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+#       # Step 2: Install Syft
+#       - name: Install Syft
+#         run: |
+#           curl -sSL https://github.com/anchore/syft/releases/download/v0.84.0/syft_0.84.0_linux_amd64.tar.gz | tar xz -C /usr/local/bin
 
-      # Step 2: Install Syft
-      - name: Install Syft
-        run: |
-          curl -sSL https://github.com/anchore/syft/releases/download/v0.84.0/syft_0.84.0_linux_amd64.tar.gz | tar xz -C /usr/local/bin
+#       # Step 3: Generate SBOM in JSON format
+#       - name: Generate SBOM
+#         run: |
+#           syft ./ --output json > sbom.json
 
-      # Step 3: Generate SBOM in JSON format
-      - name: Generate SBOM
-        run: |
-          syft ./ --output json > sbom.json
+#       # Step 4: Convert SBOM to CSV
+#       - name: Convert SBOM to CSV
+#         run: |
+#           jq -r '.artifacts[] | [.name, .version, .type] | @csv' sbom.json > sbom.csv
 
-      # Step 4: Convert SBOM to CSV
-      - name: Convert SBOM to CSV
-        run: |
-          jq -r '.artifacts[] | [.name, .version, .type] | @csv' sbom.json > sbom.csv
-
-      # Step 5: Upload SBOM and CSV as GitHub Artifact
-      - name: Upload SBOM as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: syft-sbom-files
-          path: |
-            sbom.json
-            sbom.csv
+#       # Step 5: Upload SBOM and CSV as GitHub Artifact
+#       - name: Upload SBOM as Artifact
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: syft-sbom-files
+#           path: |
+#             sbom.json
+#             sbom.csv

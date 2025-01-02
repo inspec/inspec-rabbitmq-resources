@@ -1,48 +1,48 @@
-name: Generate GitHub SBOM and Upload as Artifact
+# name: Generate GitHub SBOM and Upload as Artifact
 
-# NOTE: We would probably want to run this workflow on every push to main and not on pull requests
+# # NOTE: We would probably want to run this workflow on every push to main and not on pull requests
+
+# # on:
+# #   push:
+# #     branches:
+# #       - main
 
 # on:
-#   push:
+#   pull_request:
 #     branches:
 #       - main
 
-on:
-  pull_request:
-    branches:
-      - main
+# jobs:
+#   generate-sbom:
+#     runs-on: ubuntu-latest
 
-jobs:
-  generate-sbom:
-    runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+#       security-events: read
 
-    permissions:
-      contents: read
-      security-events: read
+#     steps:
+#       # Step 1: Checkout the repository
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
 
-    steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+#       # Step 2: Generate GitHub SBOM (Dependency Snapshot)
+#       - name: Generate GitHub SBOM
+#         id: sbom
+#         uses: actions/dependency-review-action@v3
+#         with:
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           output: sbom.json  # Save as JSON file
 
-      # Step 2: Generate GitHub SBOM (Dependency Snapshot)
-      - name: Generate GitHub SBOM
-        id: sbom
-        uses: actions/dependency-review-action@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          output: sbom.json  # Save as JSON file
+#       # Step 3: Convert SBOM to CSV
+#       - name: Convert SBOM to CSV
+#         run: |
+#           jq -r '.dependencies[] | [.package.name, .package.version, .relationship] | @csv' sbom.json > sbom.csv
 
-      # Step 3: Convert SBOM to CSV
-      - name: Convert SBOM to CSV
-        run: |
-          jq -r '.dependencies[] | [.package.name, .package.version, .relationship] | @csv' sbom.json > sbom.csv
-
-      # Step 4: Upload SBOM as GitHub Artifact
-      - name: Upload SBOM and CSV as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: sbom-files
-          path: |
-            sbom.json
-            sbom.csv
+#       # Step 4: Upload SBOM as GitHub Artifact
+#       - name: Upload SBOM and CSV as Artifact
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: sbom-files
+#           path: |
+#             sbom.json
+#             sbom.csv
