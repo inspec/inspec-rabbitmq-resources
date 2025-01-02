@@ -1,7 +1,19 @@
 name: Download and Upload SBOM
 
+# on:
+#   workflow_dispatch:
+
+
+# # NOTE: We would probably want to run this workflow on every push to main and not on pull requests
+# # on:
+# #   push:
+# #     branches:
+# #       - main
+
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   process-sbom:
