@@ -1,27 +1,28 @@
-name: Download GitHub SBOM
+name: Download and Upload SBOM
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  fetch-sbom:
+  process-sbom:
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      # Step 2: Download SBOM from GitHub Dependency Graph
-      - name: Download SBOM
-        run: |
-          curl -L -o sbom.json "${{ github.event.repository.html_url }}/dependency-graph/sbom"
+    - name: Download SBOM
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        curl -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
+          -o sbom.json
 
-      # Step 3: Upload SBOM as GitHub Artifact
-      - name: Upload SBOM as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: github-dependency-graph-sbom
-          path: sbom.json
+    - name: Upload SBOM Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: sbom
+        path: sbom.json
