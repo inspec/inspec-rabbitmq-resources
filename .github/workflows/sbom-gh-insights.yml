@@ -1,4 +1,4 @@
-name: Download and Upload SBOM
+name: Download SBOM from Insights and Convert to CSV
 
 # on:
 #   workflow_dispatch:
@@ -16,25 +16,35 @@ on:
       - main
 
 jobs:
-  process-sbom:
+  convert-sbom:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Download SBOM
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         curl -L \
           -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
           -o sbom.json
 
-    - name: Upload SBOM Artifact
+    - name: Convert SBOM to CSV using jq
+      run: |
+        jq -r '
+          .sbom.packages[] | [
+            .name,
+            .SPDXID,
+            .versionInfo,
+            .downloadLocation,
+            ( .externalRefs[]? | .referenceLocator )
+          ] | @csv' sbom.json > sbom.csv
+
+    - name: Upload SBOM CSV as Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: sbom
-        path: sbom.json
+        name: sbom-csv
+        path: sbom.csv
