@@ -64,10 +64,10 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: sbom-json
-        path: "${FILE_PREFIX}-sbom.json"
+        path: ${{ env.FILE_PREFIX }}-sbom.json
 
     - name: Upload SBOM CSV as Artifact
       uses: actions/upload-artifact@v3
       with:
         name: sbom-csv
-        path: "${FILE_PREFIX}-sbom.csv"
+        path: ${{ env.FILE_PREFIX }}-sbom.csv
