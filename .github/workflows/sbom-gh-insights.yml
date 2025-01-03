@@ -37,6 +37,14 @@ jobs:
           https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
           -o "${FILE_PREFIX}-sbom.json"
 
+    - name: Verify SBOM JSON File
+      run: |
+        ls -l "${FILE_PREFIX}-sbom.json"
+
+    - name: Preview SBOM JSON Content
+      run: |
+        head -n 20 "${FILE_PREFIX}-sbom.json"
+
     - name: Convert SBOM to CSV using jq
       run: |
         jq -r '
@@ -47,6 +55,10 @@ jobs:
             .downloadLocation,
             ( .externalRefs[]? | .referenceLocator )
           ] | @csv' "${FILE_PREFIX}-sbom.json" > "${FILE_PREFIX}-sbom.csv"
+
+    - name: Verify SBOM CSV File
+      run: |
+        ls -l "${FILE_PREFIX}-sbom.csv"
 
     - name: Upload SBOM JSON as Artifact
       uses: actions/upload-artifact@v3
@@ -59,4 +71,3 @@ jobs:
       with:
         name: sbom-csv
         path: "${FILE_PREFIX}-sbom.csv"
-
