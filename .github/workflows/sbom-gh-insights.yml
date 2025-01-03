@@ -24,7 +24,9 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set Timestamp and Unique Filename
-      run: echo "FILE_PREFIX=${{ github.repository }}-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+      run: |
+        FILE_PREFIX=$(echo "${{ github.repository }}" | sed 's|/|-|g')-$(date +%Y%m%d%H%M%S)
+        echo "FILE_PREFIX=${FILE_PREFIX}" >> $GITHUB_ENV
 
     - name: Download SBOM
       run: |
