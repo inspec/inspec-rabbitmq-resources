@@ -36,14 +36,9 @@ jobs:
           -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/${{ github.repository }}/dependency-graph/sbom \
           -o "${FILE_PREFIX}-sbom.json"
-      continue-on-error: true
 
     - name: Verify SBOM JSON File
       run: |
-        if [ ! -f "${FILE_PREFIX}-sbom.json" ]; then
-          echo "SBOM JSON file not found!"
-          exit 1
-        fi
         ls -l "${FILE_PREFIX}-sbom.json"
 
     - name: Preview SBOM JSON Content
@@ -62,7 +57,6 @@ jobs:
             ( .externalRefs[]? | .referenceLocator ),
             "None", "None", "None"
           ] | @csv' "${FILE_PREFIX}-sbom.json" >> "${FILE_PREFIX}-sbom.csv"
-      continue-on-error: true
 
     - name: Preview SBOM CSV Content
       run: |
@@ -73,18 +67,28 @@ jobs:
         TEMP_CSV="${FILE_PREFIX}-sbom-temp.csv"
         echo "name,SPDXID,versionInfo,downloadLocation,externalRefs,license,source_code_url,vendor" > "$TEMP_CSV"
         tail -n +2 "${FILE_PREFIX}-sbom.csv" | while IFS=, read -r name SPDXID versionInfo downloadLocation externalRefs license source_code_url vendor; do
+          # Debug each row
+          echo "Processing: $name, $SPDXID, $versionInfo, $downloadLocation, $externalRefs, $license, $source_code_url, $vendor"
           if [[ "$externalRefs" == *"pkg:gem"* ]]; then
+            echo "Processing RubyGem: $name"
             gem_name=$(echo "$name" | tr -d '"')
             version=$(echo "$versionInfo" | tr -d '"')
+            # Check if the version contains a version constraint (e.g., ~>, >=, <=)
             if [[ "$versionInfo" =~ [\~\>\<\=\ ] ]]; then
-              continue
+              echo "Skipping call to rubygems.org for version constraint: $versionInfo"
+              continue  # Skip processing for this gem versionInfo
             else
-              api_url="https://rubygems.org/api/v2/rubygems/${gem_name}/versions/${version}.json"
-              response=$(curl -s "$api_url")
-              new_license=$(echo "$response" | jq -r '.licenses[0] // "None"')
-              new_source_code_url=$(echo "$response" | jq -r '.source_code_uri // "None"')
-              new_vendor=$(echo "$response" | jq -r '.authors // "None"')
+              # Proceed with making the call to rubygems.org
+              echo "Making call to rubygems.org for fixed version: $versionInfo"
+              # Your logic to call rubygems.org
             fi
+            api_url="https://rubygems.org/api/v2/rubygems/${gem_name}/versions/${version}.json"
+            response=$(curl -s "$api_url")
+            echo "Response: $response"
+            new_license=$(echo "$response" | jq -r '.licenses[0] // "None"')
+            echo "License: $new_license"
+            new_source_code_url=$(echo "$response" | jq -r '.source_code_uri // "None"')
+            new_vendor=$(echo "$response" | jq -r '.authors // "None"')
           else
             new_license="None"
             new_source_code_url="None"
@@ -96,10 +100,6 @@ jobs:
 
     - name: Verify SBOM CSV File
       run: |
-        if [ ! -f "${FILE_PREFIX}-sbom.csv" ]; then
-          echo "SBOM CSV file not found!"
-          exit 1
-        fi
         ls -l "${FILE_PREFIX}-sbom.csv"
 
     - name: Upload SBOM JSON as Artifact
