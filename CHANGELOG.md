@@ -1,14 +1,15 @@
 # Changelog
-<!-- latest_release 0.1.4 -->
-## [0.1.4](https://github.com/inspec/inspec-rabbitmq-resources/tree/0.1.4) (2025-03-21)
+<!-- latest_release 0.1.5 -->
+## [0.1.5](https://github.com/inspec/inspec-rabbitmq-resources/tree/0.1.5) (2025-03-21)
 
 #### Merged Pull Requests
-- Adding Rubocop config files. [#10](https://github.com/inspec/inspec-rabbitmq-resources/pull/10) ([balasubramanian-s](https://github.com/balasubramanian-s))
+- dep: add gemspec dependency in our Gemfile [#9](https://github.com/inspec/inspec-rabbitmq-resources/pull/9) ([ahasunos](https://github.com/ahasunos))
 <!-- latest_release -->
 <!-- release_rollup -->
 ### Changes since latest stable release
 
 #### Merged Pull Requests
+- dep: add gemspec dependency in our Gemfile [#9](https://github.com/inspec/inspec-rabbitmq-resources/pull/9) ([ahasunos](https://github.com/ahasunos)) <!-- 0.1.5 -->
 - Adding Rubocop config files. [#10](https://github.com/inspec/inspec-rabbitmq-resources/pull/10) ([balasubramanian-s](https://github.com/balasubramanian-s)) <!-- 0.1.4 -->
 - CHEF-17305-Enable coverage pipelines [#6](https://github.com/inspec/inspec-rabbitmq-resources/pull/6) ([balasubramanian-s](https://github.com/balasubramanian-s)) <!-- 0.1.3 -->
 - CHEF-17305-Sonar configuration  [#5](https://github.com/inspec/inspec-rabbitmq-resources/pull/5) ([balasubramanian-s](https://github.com/balasubramanian-s)) <!-- 0.1.2 -->
