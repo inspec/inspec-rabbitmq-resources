@@ -1,35 +1,24 @@
 +++
 title = "rabbitmq_config resource"
 draft = false
-gh_repo = "inspec"
-platform = "linux"
 
-[menu]
-  [menu.inspec]
+[menu.rabbitmq]
     title = "rabbitmq_config"
-    identifier = "inspec/resources/os/rabbitmq_config.md rabbitmq_config resource"
-    parent = "inspec/resources/os"
+    identifier = "inspec/resources/rabbitmq/rabbitmq_config.md rabbitmq_config resource"
+    parent = "inspec/resources/rabbitmq"
 +++
 
 Use the `rabbitmq_config` Chef InSpec audit resource to test configuration data for the RabbitMQ daemon located at `/etc/rabbitmq/rabbitmq.config` on Linux and Unix platforms.
-
-## Availability
-
-### Install
-
-{{< readfile file="content/inspec/reusable/md/inspec_installation.md" >}}
-
-### Version
-
-This resource first became available in v1.20.0 of InSpec.
 
 ## Syntax
 
 A `rabbitmq_config` resource block declares the RabbitMQ configuration data to be tested:
 
-    describe rabbitmq_config.params('rabbit', 'ssl_listeners') do
-      it { should cmp 5671 }
-    end
+```ruby
+describe rabbitmq_config.params('rabbit', 'ssl_listeners') do
+  it { should cmp 5671 }
+end
+```
 
 where
 
@@ -40,11 +29,13 @@ where
 
 The following examples show how to use this Chef InSpec audit resource.
 
-### Test the list of TCP listeners
+Test the list of TCP listeners:
 
-    describe rabbitmq_config.params('rabbit', 'tcp_listeners') do
-      it { should eq [5672] }
-    end
+```ruby
+describe rabbitmq_config.params('rabbit', 'tcp_listeners') do
+  it { should eq [5672] }
+end
+```
 
 ## Matchers
 
